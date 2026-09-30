@@ -1,0 +1,15 @@
+# Goal : run song and stream lyrics
+string song      # void = already loaded song
+bool restart     # restart
+---
+# Result
+bool success
+string message
+int32 lines_sung
+---
+# Feedback : new line / new word
+int32 line_index
+int32 line_count
+string line
+string word
+float32 position

@@ -1,0 +1,8 @@
+# Load a song (filename in songs_dir, or absolute path)
+string song
+---
+bool success
+string message
+string title
+float32 duration
+int32 line_count

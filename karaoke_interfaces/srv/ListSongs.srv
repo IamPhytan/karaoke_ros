@@ -1,0 +1,4 @@
+# List the .lrc files available in songs_dir
+---
+string[] songs
+string current
