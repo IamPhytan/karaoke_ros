@@ -1,0 +1,19 @@
+[ti:Le blues du nœud]
+[ar:Karaoke ROS]
+[00:00.00]♪ ♪ ♪
+[00:03.00]<00:03.00>Je <00:03.30>publie <00:03.80>sur <00:04.10>un <00:04.30>topic
+[00:06.00]<00:06.00>Mais <00:06.30>personne <00:06.90>ne <00:07.10>souscrit
+[00:09.00]<00:09.00>Mon <00:09.30>QoS <00:09.80>est <00:10.10>best <00:10.40>effort
+[00:12.00]<00:12.00>Et <00:12.30>mes <00:12.50>messages <00:13.10>sont <00:13.40>perdus
+[00:15.50]Oh, c'est le blues du nœud
+[00:18.50]Le blues du nœud ROS 2
+[00:21.50]<00:21.50>J'appelle <00:22.00>un <00:22.20>service <00:22.80>qui <00:23.00>ne <00:23.20>répond <00:23.70>pas
+[00:24.50]<00:24.50>Mon <00:24.80>action <00:25.30>est <00:25.60>annulée <00:26.20>déjà
+[00:27.50]<00:27.50>Le <00:27.80>launch <00:28.20>file <00:28.60>a <00:28.80>planté
+[00:30.50]<00:30.50>Et <00:30.80>colcon <00:31.30>veut <00:31.60>tout <00:31.90>rebuilder
+[00:34.00]Oh, c'est le blues du nœud
+[00:37.00]Le blues du nœud ROS 2
+[00:40.00]<00:40.00>Mais <00:40.40>RViz <00:40.90>affiche <00:41.40>mes <00:41.60>paroles
+[00:43.00]<00:43.00>Et <00:43.30>rqt <00:43.80>me <00:44.00>dit <00:44.20>play
+[00:46.00]Alors je chante mon spin_once
+[00:49.00]Jusqu'au prochain rclpy.shutdown()

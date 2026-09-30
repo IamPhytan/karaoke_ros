@@ -1,3 +1,14 @@
+
+"""Karaoke player node.
+ 
+Services  : /karaoke/play, /karaoke/pause, /karaoke/toggle, /karaoke/stop (std_srvs/Trigger)
+            /karaoke/load_song (karaoke_interfaces/LoadSong)
+            /karaoke/list_songs (karaoke_interfaces/ListSongs)
+Action    : /karaoke/sing (karaoke_interfaces/SingSong) - feedback on every line / word
+Topic     : /karaoke/state (karaoke_interfaces/PlayerState) at tick_rate Hz
+Parameters: songs_dir, song (reloaded live via rqt_reconfigure),
+            tick_rate, play_audio, autostart
+"""
 from __future__ import annotations
 
 import threading
@@ -160,8 +171,7 @@ class KaraokePlayer(Node):
         msg.current_word = song.word_at(idx, pos)
         msg.next_line = song.lines[idx + 1].text if idx + 1 < len(song.lines) else ""
         return msg
-
-    
+  
 
     def _srv_play(self, request: Trigger.Request, response: Trigger.Response):
         pass

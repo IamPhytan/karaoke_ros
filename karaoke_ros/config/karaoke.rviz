@@ -1,0 +1,55 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+    Property Tree Widget:
+      Expanded: [/Global Options1, /Karaoke1]
+    Tree Height: 300
+  - Class: rviz_common/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Enabled: true
+      Cell Size: 1
+      Plane Cell Count: 10
+      Color: 60; 60; 70
+      Reference Frame: world
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Karaoke
+      Enabled: true
+      Topic:
+        Value: /karaoke/markers
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+      Namespaces:
+        karaoke: true
+  Enabled: true
+  Global Options:
+    Background Color: 12; 12; 18
+    Fixed Frame: world
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/MoveCamera
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Name: Current View
+      Distance: 9.0
+      Focal Point: {X: 0.0, Y: 0.0, Z: 1.3}
+      Pitch: 0.05
+      Yaw: 4.71
+      Near Clip Distance: 0.01
+      Target Frame: <Fixed Frame>
+    Saved: ~
+Window Geometry:
+  Displays:
+    collapsed: true
+  Height: 800
+  Width: 1400
+  Hide Left Dock: true
+  Hide Right Dock: true

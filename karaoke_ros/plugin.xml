@@ -1,0 +1,13 @@
+<library path="src">
+  <class name="Karaoke" type="karaoke_ros.rqt_karaoke.KaraokePlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>karaoke_ros control</description>
+    <qtgui>
+      <group>
+        <label>Karaoke</label>
+      </group>
+      <label>Karaoke Remote</label>
+      <icon type="theme">media-playback-start</icon>
+      <statustip>karaoke_player control</statustip>
+    </qtgui>
+  </class>
+</library>
