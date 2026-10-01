@@ -230,7 +230,12 @@ class KaraokePlayer(Node):
         req: LoadSong.Request,
         res: LoadSong.Response,
     ) -> LoadSong.Response:
-        raise NotImplementedError()
+        ok, msg = self._load(req.song)
+        res.success, res.message = ok, msg
+        if ok and self._song:
+            res.title = self._song.title
+            res.duration = float(self._song.duration)
+            res.line_count = len(self._song.lines)
         return res
 
     def _srv_list(
@@ -238,7 +243,9 @@ class KaraokePlayer(Node):
         req: ListSongs.Request,
         res: ListSongs.Response,
     ) -> ListSongs.Response:
-        raise NotImplementedError()
+        d = self._songs_dir()
+        res.songs = sorted(p.name for p in d.glob("*.lrc")) if d.exists() else []
+        res.current = self._song_name
         return res
 
     def _on_params(self, params):
@@ -262,7 +269,51 @@ class KaraokePlayer(Node):
                 goal.abort()
                 result.message = msg
                 return result
-            raise NotImplementedError()
+        if self._song is None:
+            goal.abort()
+            result.message = "No song loaded"
+            return result
+        if req.restart:
+            self._rewind()
+        self._set_playing(True)
+
+        song = self._song
+        last_idx, last_word, lines_sung = -2, None, 0
+        rate = self.create_rate(30.0)
+        while rclpy.ok():
+            if goal.is_cancel_requested:
+                self._set_playing(False)
+                goal.canceled()
+                result.message = "Canceled"
+                result.lines_sung = lines_sung
+                return result
+            if self._song is not song:
+                goal.abort()
+                result.message = "Song was changed while singing !"
+                return result
+            with self._lock:
+                pos = self._position
+            idx = song.line_index_at(pos)
+            word = song.word_at(idx, pos)
+            # Only publish feedback when the line or the word changes
+            if idx != last_idx or word != last_word:
+                fb = SingSong.Feedback()
+                fb.line_index, fb.line_count = idx, len(song.lines)
+                fb.line = song.lines[idx].text if idx >= 0 else ""
+                fb.word, fb.position = word, float(pos)
+                goal.publish_feedback(fb)
+                if idx != last_idx and idx >= 0:
+                    lines_sung += 1
+                last_idx, last_word = idx, word
+
+            if pos >= song.duration:
+                break
+            rate.sleep()
+
+        goal.succeed()
+        result.success, result.message = True, "Done"
+        result.lines_sung = lines_sung
+        return result
 
 
 def main():
