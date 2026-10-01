@@ -59,7 +59,7 @@ class KaraokePlayer(Node):
         self._audio_loaded = False
 
         cbg = ReentrantCallbackGroup()
-        self._state_pub = self.create_publisher(PlayerState, "~/state", 10)
+        self._state_pub = self.create_publisher(PlayerState, "state", 10)
 
         for name, fn in (
             ("play", self._srv_play),
@@ -67,11 +67,9 @@ class KaraokePlayer(Node):
             ("toggle", self._srv_toggle),
             ("stop", self._srv_stop),
         ):
-            self.create_service(Trigger, f"~/{name}", fn, callback_group=cbg)
-        self.create_service(LoadSong, "~/load_song", self._srv_load, callback_group=cbg)
-        self.create_service(
-            ListSongs, "~/list_songs", self._srv_list, callback_group=cbg
-        )
+            self.create_service(Trigger, name, fn, callback_group=cbg)
+        self.create_service(LoadSong, "load_song", self._srv_load, callback_group=cbg)
+        self.create_service(ListSongs, "list_songs", self._srv_list, callback_group=cbg)
 
         self._action = ActionServer(
             self,
@@ -124,9 +122,7 @@ class KaraokePlayer(Node):
                     self._audio_loaded = True
                 except Exception as e:  # noqa: BLE001
                     self.get_logger().warn(f"Audio not loaded : {e}")
-        self.get_logger().info(
-            f"Loaded '{song.title}' ({len(song.lines)} lines, {song.duration:.0f}s)"
-        )
+        self.get_logger().info(f"Loaded '{song.title}' ({len(song.lines)} lines, {song.duration:.0f}s)")
         return True, f"Loaded {path.name}"
 
     def _set_playing(self, playing: bool) -> None:

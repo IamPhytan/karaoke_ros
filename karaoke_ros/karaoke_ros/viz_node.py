@@ -43,7 +43,7 @@ class KaraokeViz(Node):
         self._pub = self.create_publisher(MarkerArray, "/karaoke/markers", 10)
         self.create_subscription(PlayerState, "/karaoke/state", self._on_state, 10)
         # Publish at a fixed rate, decoupled from the player's tick rate
-        self.create_timer(1.0 / self.get_parameter("publish_rate").value, self.self._publish)
+        self.create_timer(1.0 / self.get_parameter("publish_rate").value, self._publish)
 
     def _on_state(self, msg: PlayerState) -> None:
         self._state = msg
