@@ -11,7 +11,7 @@ Visualization Manager:
   Displays:
     - Class: rviz_default_plugins/Grid
       Name: Grid
-      Enabled: true
+      Enabled: false
       Cell Size: 1
       Plane Cell Count: 10
       Color: 60; 60; 70
