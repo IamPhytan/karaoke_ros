@@ -29,6 +29,10 @@ class KaraokePlugin(Plugin):
         self._node = context.node  # node provided and spun by rqt
         self._state = None
         self._last_songs: list[str] = []
+        # Last loaded song we synced the combo box to. The combo is only updated
+        # when the *loaded* song changes, never continuously, so the user's
+        # selection is not overwritten before they press "Load".
+        self._synced_song = ""
 
         # --- service clients / subscriber
         self._cli = {n: self._node.create_client(Trigger, f"/karaoke/{n}") for n in ("play", "pause", "toggle", "stop")}
@@ -125,7 +129,17 @@ class KaraokePlugin(Plugin):
             return
         req = LoadSong.Request()
         req.song = name
-        self._cli_load.call_async(req)
+        fut = self._cli_load.call_async(req)
+        fut.add_done_callback(self._on_loaded)
+
+    def _on_loaded(self, fut) -> None:
+        try:
+            res = fut.result()
+        except Exception as e:
+            self._node.get_logger().error(f"load_song failed: {e}")
+            return
+        if not res.success:
+            self._node.get_logger().warn(f"load_song: {res.message}")
 
     # ------------------------------------------------------------ Qt
     def _update_ui(self) -> None:
@@ -153,8 +167,11 @@ class KaraokePlugin(Plugin):
         self._lbl_time.setText(f"{_fmt(s.position)} / {_fmt(s.duration)}   line {s.line_index + 1}/{s.line_count}")
         self._progress.setValue(int(1000 * s.position / s.duration) if s.duration > 0 else 0)
         # Keep the combo in sync with the loaded song, unless the user is interacting
-        if s.song and self._combo.findText(s.song) >= 0 and not self._combo.hasFocus():
-            self._combo.setCurrentText(s.song)
+        # Sync the combo only when the loaded song changes (startup, load via service/param from elsewhere), so the user's pending selection survives
+        if s.song and s.song != self._synced_song:
+            self._synced_song = s.song
+            if self._combo.findText(s.song) >= 0:
+                self._combo.setCurrentText(s.song)
 
     def shutdown_plugin(self) -> None:
         # Clean up ROS entities: the rqt node outlives the plugin

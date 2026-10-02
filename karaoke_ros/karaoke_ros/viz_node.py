@@ -24,6 +24,14 @@ def _rgba(r: float, g: float, b: float, a: float = 1.0) -> ColorRGBA:
     return ColorRGBA(r=float(r), g=float(g), b=float(b), a=float(a))
 
 
+# RViz's Ogre font only covers a limited glyph range: map common symbols to ASCII
+_ASCII_MAP = {"▶": ">", "❚": "|", "■": "#", "—": "-", "–": "-", "♪": "~", "«": '"', "»": '"', "’": "'", "…": "..."}
+
+
+def _safe(text: str) -> str:
+    return "".join(_ASCII_MAP.get(c, c) for c in text)
+
+
 def _fmt(t: float) -> str:
     """Format seconds as mm:ss."""
     t = max(0, int(t))
@@ -59,7 +67,7 @@ class KaraokeViz(Node):
         m.pose.orientation.w = 1.0
         m.scale.z = scale  # only scale.z matters for text (letter height)
         m.color = color
-        m.text = text if text else " "  # RViz ignores empty text
+        m.text = _safe(text).strip()
         return m
 
     def _bar(self, mid: int, frac: float, color: ColorRGBA, z: float = 0.0) -> Marker:
@@ -83,10 +91,10 @@ class KaraokeViz(Node):
         scale = self.get_parameter("text_scale").value
         arr = MarkerArray()
 
-        playing = "▶" if s.playing else "❚❚"
+        playing = ">" if s.playing else "||"
         header = f"{playing}  {s.title or s.song or 'No song'}"
         if s.artist:
-            header += f" — {s.artist}"
+            header += f" - {s.artist}"
         header += f"   {_fmt(s.position)} / {_fmt(s.duration)}"
 
         # Dim the current line when paused
