@@ -3,8 +3,8 @@
 <package format="3">
   <name>karaoke_ros</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="phicoltan@gmail.com">damien</maintainer>
+  <description>Karaoke emulator in ROS</description>
+  <maintainer email="phicoltan@gmail.com">Damien LaRocque</maintainer>
   <license>MIT</license>
 
   <depend>rclpy</depend>
