@@ -5,6 +5,8 @@
 
 > Yes, ROS 2 is jazzy and lyrical, but can it karaoke?
 
+![RViz](assets/rviz.png)
+
 This repo contains two packages:
 * [`karaoke_interfaces`](karaoke_interfaces/)
 * [`karaoke_ros`](karaoke_ros/)
